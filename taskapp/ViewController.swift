@@ -155,7 +155,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // 「searchTextが空になっているとき」は検索をやめて、全件表示するようにしてみましょう
         
         if !searchText.isEmpty {
-             _ = NSPredicate(format: "category = %@", searchText);
             // searchTextに文字が入っているとき
             
             // ヒント:
@@ -164,14 +163,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             // predicateのformatの中に何を入れれば検索が実装できるかを考えてみましょう！
             
 
-            let predicate = NSPredicate(format: "", searchText)
-            taskArray = realm.objects(Task.self)
-               .filter(predicate)
-                .sorted(byKeyPath: "date", ascending: false)
+            let predicate = NSPredicate(format: "category CONTAINS[c] %@", searchText)
+            taskArray = realm.objects(Task.self).filter(predicate).sorted(byKeyPath: "date", ascending: false)
         }
         else {
-            _ = try! Realm()
-            _ = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)
+            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)
             
             // searchTextが空になっているとき
             
